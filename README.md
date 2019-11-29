@@ -7,7 +7,7 @@
 
 ------
 
-## 【Introduction:】
+【Introduction:】
 **This is a ***[Matlab-based]()*** toolbox to automatically report the MRI scanning parameters information.**
 
 **PS: Now it only works well for Simens scan parameter report.**
