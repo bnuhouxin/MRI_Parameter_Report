@@ -42,7 +42,7 @@ The [MRI_Parameters_Report]() is now at the beginning of the MATLAB search path.
 
 - **Step2:** Click the [**Report**]() pushbutton, then a graphical marquee interface pops up, now you need to select file path to store the reported information file ([*.mat]()) that will be produced. 
 
-  Then about one minute later, all the works will be done.
+  Then about one minute later, all the works will be done. The output information will be printed on the GUI interface, and a mat file that contains all the output information will saved to your predefined file path.
 
 
 <center><img src="https://uploader.shimo.im/f/hPttRSWuvWMElcGD.png" width="500" /></center> 
