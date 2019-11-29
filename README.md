@@ -7,7 +7,7 @@
 
 ------
 
-【Introduction:】
+## 【Introduction:】
 **This is a ***[Matlab-based]()*** toolbox to automatically report the MRI scanning parameters information.**
 
 **PS: Now it only works well for Simens scan parameter report.**
@@ -18,9 +18,17 @@
 
 ## 【Requirements:】
 
-* SPM12
+- **SPM12**
 
 ## 【To start the toolbox:】
+
+**On the Matlab command window, type:** *MRI_Parameters_Report_GUI*: 
+
+**If your Matlab version is R2019b, we recommend you use mlapp. To start it, On the Matlab command window, type:** *MRI_Parameters_Report*
+
+
+
+
 
 
 <center><img src="https://uploader.shimo.im/f/hPttRSWuvWMElcGD.png" width="500" /></center> 
