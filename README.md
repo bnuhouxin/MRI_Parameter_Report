@@ -10,23 +10,32 @@
 ## [Introduction:]
 **This is a ***[Matlab-based]()*** toolbox to automatically report the MRI scanning parameters information.**
 
-**PS: Now it only works well for Simens scan parameter report.**
+**[Note](): now it only works well for Siemens scan ([3D T1 && Functional Images]()) parameter report.**
 
-## 【Installing the toolbox:】
+## [Installing The Toolbox:]
 
-**Download and unzip MRI_Parameters_Report.zip, and add the directory to the matlab path (in Matlab’s File-Set path)**
+- **Download and unzip MRI_Parameters_Report.zip**
+- **Start Matlab**
+- **Add the [MRI_Parameters_Report]() directory to the matlab path (in [*Matlab’s File->Set path)->Add with subfolder*]() )**
+- **Click [Save]() and then [Close]()**
 
-## 【Requirements:】
+The [MRI_Parameters_Report]() is now at the beginning of the MATLAB search path.
+## [Requirements:]
 
-- **SPM12**
+- [**SPM12**](https://www.fil.ion.ucl.ac.uk/spm/software/spm12/)
 
-## 【To start the toolbox:】
+## [To Start The Toolbox:]
 
-**On the Matlab command window, type:** *MRI_Parameters_Report_GUI*: 
+- **On the Matlab command window, type:**
 
-**If your Matlab version is R2019b, we recommend you use mlapp. To start it, On the Matlab command window, type:** *MRI_Parameters_Report*
+  *>> MRI_Parameters_Report_GUI* 
 
+- **If your Matlab version is R2019b, we recommend you use mlapp. To start it, On the Matlab command window, type:** 
 
+  *>> MRI_Parameters_Report* 
+  
+## [User Guide:]
+- **Step1:** Click the right buttion 
 
 
 
