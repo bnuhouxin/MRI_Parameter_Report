@@ -198,13 +198,18 @@ if ischar(get(handles.DcmPath,'string'))
     waitbar(4/10,h);
     
     pm.nii_v=spm_vol(pm.nii_name.files{1});
+	pm.slice_num=pm.nii_v(1).dim(3);
+
     delete(pm.nii_name.files{:});
         
     if size(pm.nii_name.files,1) > 1      
         if isfield(pm.hdr{1},'Private_0019_1029')
-            pm.slice_times = pm.hdr{1}.Private_0019_1029;
+            slice_times = pm.hdr{1}.Private_0019_1029;
+			
+			units_type=length(slice_times)/pm.slice_num;
+			eval(['pm.slice_times=typecast(uint',num2str(units_type),'(slice_times), ''double'')']);
             [~,pm.slice_order] = sort(pm.slice_times);
-            set(handles.SliceOrder,'string',num2str(pm.slice_order));
+			set(handles.SliceOrder,'string',num2str(pm.slice_order));
             if all(diff(pm.slice_order)>0) || all(diff(pm.slice_order)>0)
                 pm.inter_gap=pm.SpacingBetweenSlices;
                 set(handles.SliceGap,'string',num2str(pm.inter_gap));
@@ -231,7 +236,6 @@ if ischar(get(handles.DcmPath,'string'))
     
     pm.volume_number=size(pm.nii_name.files,1);
                 
-    pm.slice_num=pm.nii_v(1).dim(3);
     pm.Matrix_nii=[pm.nii_v(1).dim([1:2])];
 
     pm.FOV=[pm.PixelSpacing.*pm.Matrix_nii];
