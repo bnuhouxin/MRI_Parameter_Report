@@ -16,8 +16,11 @@
 
 **Download and unzip MRI_Parameters_Report.zip, and add the directory to the matlab path (in Matlab’s File-Set path)**
 
-## 【Installing the toolbox:】
+## 【Requirements:】
 
+* SPM12
+
+## 【To start the toolbox:】
 
 
 <center><img src="https://uploader.shimo.im/f/hPttRSWuvWMElcGD.png" width="500" /></center> 
