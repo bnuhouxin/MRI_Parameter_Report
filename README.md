@@ -17,7 +17,7 @@ Please report any bugs, comments and/or suggestions to: Xin Hou, [houxin195776@m
 
 - **Download and unzip MRI_Parameters_Report.zip**
 - **Start Matlab**
-- **Add the [MRI_Parameters_Report]() directory to the matlab path (in [*Matlab’s File->Set path)->Add with subfolder*]() )**
+- **Add the [MRI_Parameters_Report]() directory to the matlab path (in [*Matlab’s File->Set path->Add with subfolder*]() )**
 - **Click [Save]() and then [Close]()**
 
 The [MRI_Parameters_Report]() is now at the beginning of the MATLAB search path.
