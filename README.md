@@ -11,6 +11,8 @@
 
 **[Note](): now it only works well for Siemens scan ([3D T1 && Functional Images]()) parameter report.**
 
+Please report any bugs, comments and/or suggestions to: Xin Hou, [houxin195776@mail.bnu.edu.cn]().
+
 ## [Installing The Toolbox:]
 
 - **Download and unzip MRI_Parameters_Report.zip**
