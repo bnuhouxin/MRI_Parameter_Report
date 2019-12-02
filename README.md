@@ -46,4 +46,4 @@ The [MRI_Parameters_Report]() is now at the beginning of the MATLAB search path.
   Then about one minute later, all the works will be done. The output information will be printed on the GUI interface, and a mat file that contains all the output information will saved to your predefined file path.
 
 
-<img src="https://uploader.shimo.im/f/hPttRSWuvWMElcGD.png" width="500" />
+<img src="https://uploader.shimo.im/f/cr1OM7G8ROMpSVuR.png!thumbnail" width="500" />
