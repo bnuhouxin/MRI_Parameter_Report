@@ -29,12 +29,12 @@ The [MRI_Parameters_Report]() is now at the beginning of the MATLAB search path.
 
 - **On the Matlab command window, type:**
 ``` matlab
-  *>> MRI_Parameters_Report_GUI* 
+  >> MRI_Parameters_Report_GUI
 ```
 
 - **If your Matlab version is R2019b, we recommend you use mlapp. To start it, On the Matlab command window, type:** 
 ``` matlab
-  *>> MRI_Parameters_Report* 
+  >> MRI_Parameters_Report
 ```
 ## [User Guide:]
 - **Step1:** Click the pushbutton in the upper right corner to add the [***Raw DCM/IMG Folder***]().
