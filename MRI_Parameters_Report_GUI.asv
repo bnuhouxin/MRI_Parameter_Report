@@ -22,7 +22,7 @@ function varargout = MRI_Parameters_Report_GUI(varargin)
 
 % Edit the above text to modify the response to help MRI_Parameters_Report_GUI
 
-% Last Modified by GUIDE v2.5 27-Oct-2019 12:49:28
+% Last Modified by GUIDE v2.5 02-Jan-2020 15:55:04
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -172,7 +172,11 @@ if ischar(get(handles.DcmPath,'string'))
     waitbar(1/10,h);
     
     pm.hdr=spm_dicom_headers(pm.dcm_files(1,:));
-    pm.MRI_System=[pm.hdr{1}.Manufacturer,pm.hdr{1}.ManufacturerModelName,pm.hdr{1}.SoftwareVersions];
+    if isfield(pm.hdr{1},'ManufacturerModelName')
+        pm.MRI_System=[pm.hdr{1}.Manufacturer,pm.hdr{1}.ManufacturerModelName,pm.hdr{1}.SoftwareVersions];
+    else
+        pm.MRI_System=[pm.hdr{1}.Manufacturer];
+    end
     pm.series_name=pm.hdr{1}.SequenceName;
     pm.TR=pm.hdr{1}.RepetitionTime;
     pm.TE=pm.hdr{1}.EchoTime;
@@ -198,18 +202,22 @@ if ischar(get(handles.DcmPath,'string'))
     waitbar(4/10,h);
     
     pm.nii_v=spm_vol(pm.nii_name.files{1});
-	pm.slice_num=pm.nii_v(1).dim(3);
-
+    pm.slice_num=pm.nii_v(1).dim(3);
+    
     delete(pm.nii_name.files{:});
         
-    if size(pm.nii_name.files,1) > 1      
+    if size(pm.nii_name.files,1) > 1
         if isfield(pm.hdr{1},'Private_0019_1029')
             slice_times = pm.hdr{1}.Private_0019_1029;
-			
-			units_type=length(slice_times)/pm.slice_num;
-			eval(['pm.slice_times=typecast(uint',num2str(units_type),'(slice_times), ''double'')']);
+        
+            units_type=length(slice_times)/pm.slice_num;
+            if units_type ==1
+                pm.slice_times=typecast(slice_times, 'double');
+            else
+                eval(['pm.slice_times=typecast(uint',num2str(units_type),'(slice_times), ''double'')']);
+            end
             [~,pm.slice_order] = sort(pm.slice_times);
-			set(handles.SliceOrder,'string',num2str(pm.slice_order));
+            set(handles.SliceOrder,'string',num2str(pm.slice_order));
             if all(diff(pm.slice_order)>0) || all(diff(pm.slice_order)>0)
                 pm.inter_gap=pm.SpacingBetweenSlices;
                 set(handles.SliceGap,'string',num2str(pm.inter_gap));
@@ -698,3 +706,50 @@ function SliceOrder_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+
+function SortPath_Callback(hObject, eventdata, handles)
+% hObject    handle to SortPath (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of SortPath as text
+%        str2double(get(hObject,'String')) returns contents of SortPath as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function SortPath_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to SortPath (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in AddSort.
+function AddSort_Callback(hObject, eventdata, handles)
+% hObject    handle to AddSort (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+sort_path = uigetdir(pwd);
+if ischar(sort_path)
+    set(handles.SortPath,'string',sort_path);
+end
+
+
+% --- Executes on button press in run_rm.
+function run_rm_Callback(hObject, eventdata, handles)
+% hObject    handle to run_rm (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+sort_path = get(handles.SortPath,'string');
+if ischar(get(handles.SortPath,'string'))
+   mri_series_sorting(app.SortPath.Value);
+   msgbox('MRI Data Sorting Done!', 'Success','warn');
+end
+
