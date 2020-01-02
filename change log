@@ -3,4 +3,4 @@
    
 ## 2020-01-02
   debug:
-  fixed the code for reporting the slice order in different data type (double, unit8 and unit32 et al.)
+  fixed the code for reporting the slice order in different data type (double, unit8 and unit32 et al.).
