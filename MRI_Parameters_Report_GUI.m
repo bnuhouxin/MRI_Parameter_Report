@@ -724,47 +724,29 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-
-function SortPath_Callback(hObject, eventdata, handles)
-% hObject    handle to SortPath (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of SortPath as text
-%        str2double(get(hObject,'String')) returns contents of SortPath as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function SortPath_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to SortPath (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in AddSort.
-function AddSort_Callback(hObject, eventdata, handles)
-% hObject    handle to AddSort (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-sort_path = uigetdir(pwd);
-if ischar(sort_path)
-    set(handles.SortPath,'string',sort_path);
-end
-
-
-% --- Executes on button press in run_rm.
-function run_rm_Callback(hObject, eventdata, handles)
-% hObject    handle to run_rm (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-sort_path = get(handles.SortPath,'string');
-if ischar(sort_path)
-   mri_series_sorting(sort_path);
-   msgbox('MRI Data Sorting Done!', 'Success','warn');
-end
+function val = jsonVal(fnm, key)
+%read numeric values saved in JSON format
+% e.g. use 
+%    bidsVal1(fnm, '"RepetitionTime":') 
+%for file with 
+%   "RepetitionTime": 3,
+val = [];
+if ~exist(fnm, 'file'), return; end;
+txt = fileread(fnm);
+pos = strfind(txt,key);
+if isempty(pos), return; end;
+txt = txt(pos(1)+numel(key): end);
+pos = strfind(txt,'[');
+posComma = strfind(txt,',');
+if isempty(posComma), return; end; %nothing to do
+if isempty(pos) || (posComma(1) < pos(1)) %single value, not array
+    txt = txt(1: posComma(1)-1);
+    val = str2double(txt); %BIDS=sec, SPM=msec
+    return; 
+end;
+txt = txt(pos(1)+1: end);
+pos = strfind(txt,']');
+if isempty(pos), return; end;
+txt = txt(1: pos(1)-1);
+val = str2num(txt); %#ok<ST2NM> %BIDS=sec, SPM=msec
+%end jsonVal() 
