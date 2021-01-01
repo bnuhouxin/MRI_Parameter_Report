@@ -198,57 +198,70 @@ if ischar(get(handles.DcmPath,'string'))
         pm.inter_gap=0;
     end
         
-    pm.hdrs=spm_dicom_headers(pm.dcm_files);
-    pm.nii_name=spm_dicom_convert(pm.hdrs,'all','flat','nii');
+    % pm.hdrs=spm_dicom_headers(pm.dcm_files);
+    % pm.nii_name=spm_dicom_convert(pm.hdrs,'all','flat','nii');
+    
+    % dcm2nii using dcm2niix ----------------------------------------------
+    [ProgramPath, ~, ~] = fileparts(which('dcm2nii.exe'));
+    cd(ProgramPath);
+    InputDir = pm.dcm_path;
+    OutputDir = pm.dcm_path;
+
+    Option='-b y -x y -z n'; 
+    
+    if ispc
+        eval(['!dcm2niix.exe ',Option,' -o ',OutputDir,' ',InputDir]); 
+    elseif ismac
+        eval(['!./dcm2niix_mac ',Option,' -o ',OutputDir,' ',InputDir]);
+    else
+        eval(['!chmod +x dcm2niix_linux']);
+        eval(['!./dcm2niix_linux ',Option,' -o ',OutputDir,' ',InputDir]);  
+    end
+    
+    nii_pn = dir(fullfile(OutputDir,'*.nii'));
+    jsn_pn = dir(fullfile(OutputDir,'*.json'));
+    
+    cd(OutputDir);
+    % dcm2nii using dcm2niix ----------------------------------------------
+    
+    v = spm_vol_nifti(nii_pn(1).name);
     
     waitbar(4/10,h);
     
-    pm.nii_v=spm_vol(pm.nii_name.files{1});
-    pm.slice_num=pm.nii_v(1).dim(3);
-    
-    delete(pm.nii_name.files{:});
+    % pm.nii_v=spm_vol(pm.nii_name.files{1});
+    % pm.slice_num=pm.nii_v(1).dim(3);
+    %
+    % delete(pm.nii_name.files{:});
         
-    if size(pm.nii_name.files,1) > 1
-        if isfield(pm.hdr{1},'Private_0019_1029')
-            slice_times = pm.hdr{1}.Private_0019_1029;
+    pm.dim = v.dim;
+    pm.private_size = size(v.private.dat);
+    if length(pm.private_size) > 3
+        jsn_fnm = jsn_pn(1).name;
+        pm.slice_times = jsonVal(jsn_fnm, '"SliceTiming":');
+        [~,pm.slice_order] = sort(pm.slice_times');
+        set(handles.SliceOrder,'string',num2str(pm.slice_order));
         
-            units_type=length(slice_times)/pm.slice_num;
-            if units_type ==1
-                pm.slice_times=typecast(slice_times, 'double');
-            else
-                eval(['pm.slice_times=typecast(uint',num2str(units_type),'(slice_times), ''double'')']);
-            end
-            
-            [~,pm.slice_order] = sort(pm.slice_times);
-            set(handles.SliceOrder,'string',num2str(pm.slice_order));
-            if all(diff(pm.slice_order)>0) || all(diff(pm.slice_order)>0)
-                pm.inter_gap=pm.SpacingBetweenSlices;
-                set(handles.SliceGap,'string',num2str(pm.inter_gap));
-            else
-                pm.inter_gap=pm.SpacingBetweenSlices-pm.slice_thickness;
-                set(handles.SliceGap,'string',num2str(pm.inter_gap));
-            end
+        if all(diff(pm.slice_order)>0) || all(diff(pm.slice_order)<0)
+            pm.inter_gap=pm.SpacingBetweenSlices;
+            set(handles.SliceGap,'string',num2str(pm.inter_gap));
         else
-            if pm.SpacingBetweenSlices > pm.slice_thickness
-                pm.inter_gap=pm.SpacingBetweenSlices-pm.slice_thickness;
-                set(handles.SliceGap,'string',num2str(pm.inter_gap));
-            else
-                pm.inter_gap=pm.SpacingBetweenSlices;
-                set(handles.SliceGap,'string',num2str(pm.inter_gap));
-            end
-            
-            set(handles.text_SliceOrder,'visible','off');
-            set(handles.SliceOrder,'visible','off');
+            pm.inter_gap=pm.SpacingBetweenSlices-pm.slice_thickness;
+            set(handles.SliceGap,'string',num2str(pm.inter_gap));
         end
+        pm.slice_num=pm.dim(3);
+        pm.Matrix_nii=[pm.dim([1:2])];
     else
         set(handles.text_SliceOrder,'visible','off');
         set(handles.SliceOrder,'visible','off');
+        pm.slice_num=size(pm.dcm_files,1);
+        pm.Matrix_nii=[pm.dim([2:3])];
     end
     
-    pm.volume_number=size(pm.nii_name.files,1);
+    delete(fullfile(OutputDir,nii_pn(:).name));
+    delete(fullfile(OutputDir,jsn_pn(1).name));
+    
+    pm.volume_number=size(pm.dcm_files,1);
                 
-    pm.Matrix_nii=[pm.nii_v(1).dim([1:2])];
-
     pm.FOV=[pm.PixelSpacing.*pm.Matrix_nii];
     pm.Voxel_Size=[pm.PixelSpacing,pm.slice_thickness];
 
