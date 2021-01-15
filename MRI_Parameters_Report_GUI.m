@@ -269,12 +269,11 @@ if ischar(get(handles.DcmPath,'string'))
     end
     cd(pm_path);
     rmdir(OutputDir,'s');
-%     delete(fullfile(OutputDir,nii_pn(:).name));
-%     delete(fullfile(OutputDir,jsn_pn(1).name));
+
     if size(v,1) > 1
         pm.volume_number = size(v,1);
     else
-        pm.volume_number = size(pm.dcm_files,1);   
+        pm.volume_number = 1;   
     end
         
     
