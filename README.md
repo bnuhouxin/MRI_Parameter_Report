@@ -2,7 +2,7 @@
 
 
 ![](https://img.shields.io/badge/version-v2.0-brightgreen.svg)
-![](https://img.shields.io/badge/release-2019/11/22-green.svg)
+![](https://img.shields.io/badge/release-2021/01/15-green.svg)
 ![](https://img.shields.io/badge/updata-2020/01/02-orange.svg)
 ![](https://img.shields.io/badge/licese-GPLV3.0-blue.svg)
 ------
