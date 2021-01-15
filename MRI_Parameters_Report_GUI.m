@@ -163,10 +163,13 @@ if ischar(get(handles.DcmPath,'string'))
     
     pm.dcm_files=spm_get('Files',pm.dcm_path,'*.dcm');
     if isempty(pm.dcm_files)
-        pm.dcm_files=spm_get('Files',pm.dcm_path,'*.img');
+        pm.dcm_files=spm_get('Files',pm.dcm_path,'*.IMA');
     end
     if isempty(pm.dcm_files)
-        pm.dcm_files=spm_get('Files',pm.dcm_path,'*.IMA');
+        pm.dcm_files=spm_get('Files',pm.dcm_path,'*.ima');
+    end
+    if isempty(pm.dcm_files)
+        pm.dcm_files=spm_get('Files',pm.dcm_path,'*.img');
     end
     
     waitbar(1/10,h);
