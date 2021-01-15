@@ -200,8 +200,6 @@ if ischar(get(handles.DcmPath,'string'))
         pm.SpacingBetweenSlices=pm.hdr{1}.SpacingBetweenSlices;
     end
             
-    % pm.hdrs=spm_dicom_headers(pm.dcm_files);
-    % pm.nii_name=spm_dicom_convert(pm.hdrs,'all','flat','nii');
     
     % dcm2nii using dcm2niix ----------------------------------------------
     [ProgramPath, ~, ~] = fileparts(which('dcm2niix.exe'));
@@ -226,10 +224,9 @@ if ischar(get(handles.DcmPath,'string'))
     jsn_pn = dir(fullfile(OutputDir,'*.json'));
     % dcm2nii using dcm2niix ----------------------------------------------
     
-    v = spm_vol(nii_pn(1).name);
-    
+
     waitbar(4/10,h);
-       
+    v = spm_vol(nii_pn(1).name);       
     pm.dim = v(1,1).dim;
     pm.private_size = size(v(1,1).private.dat);
     if length(pm.private_size) > 3
@@ -785,31 +782,3 @@ if ischar(sort_path)
    mri_series_sorting(sort_path);
    msgbox('MRI Data Sorting Done!', 'Success','warn');
 end
-
-
-function val = jsonVal(fnm, key)
-%read numeric values saved in JSON format
-% e.g. use 
-%    bidsVal1(fnm, '"RepetitionTime":') 
-%for file with 
-%   "RepetitionTime": 3,
-val = [];
-if ~exist(fnm, 'file'), return; end;
-txt = fileread(fnm);
-pos = strfind(txt,key);
-if isempty(pos), return; end;
-txt = txt(pos(1)+numel(key): end);
-pos = strfind(txt,'[');
-posComma = strfind(txt,',');
-if isempty(posComma), return; end; %nothing to do
-if isempty(pos) || (posComma(1) < pos(1)) %single value, not array
-    txt = txt(1: posComma(1)-1);
-    val = str2double(txt); %BIDS=sec, SPM=msec
-    return; 
-end;
-txt = txt(pos(1)+1: end);
-pos = strfind(txt,']');
-if isempty(pos), return; end;
-txt = txt(1: pos(1)-1);
-val = str2num(txt); %#ok<ST2NM> %BIDS=sec, SPM=msec
-%end jsonVal() 
